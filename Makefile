@@ -13,9 +13,19 @@ DEPS = -MMD -MF $(@:.o=.d)
 all: kernel.elf
 
 # Kernel code
-kernel_SRC = start.S
+kernel_SRC  = start.S
+kernel_SRC += kmain.c
 
-SUBDIRS = kernel
+# Devices code.
+devices_SRC = devices/vga.c
+
+# Lib code.
+lib_SRC  = lib/stdio.c
+lib_SRC += lib/string.c
+lib_SRC += lib/arithmetic.c
+lib_SRC += lib/kernel/console.c
+
+SUBDIRS = kernel devices lib
 SOURCES = $(foreach dir,$(SUBDIRS),$($(dir)_SRC))
 OBJECTS = $(patsubst %.c,%.o,$(patsubst %.S,%.o,$(SOURCES)))
 DEPENDS = $(patsubst %.o,%.d,$(OBJECTS))
